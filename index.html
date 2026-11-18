@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es-AR" data-palette="frutilla">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cafito · Café Take &amp; Away</title>
+  <meta name="description" content="Elegí tu café y algo rico, armá tu pedido y coordiná el retiro por WhatsApp con cafito.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#fbf5e9">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:title" content="cafito · Café Take &amp; Away">
+  <meta property="og:description" content="Tu café, to go. Elegí lo que te tienta y coordiná el retiro por WhatsApp.">
+  <meta property="og:image" content="https://parana-business.github.io/cafito/assets/hero.webp">
+  <link rel="icon" href="assets/espresso.webp" type="image/webp">
+  <script>
+    const palette = new URLSearchParams(location.search).get('paleta');
+    if (['frutilla', 'pistacho', 'moka'].includes(palette)) document.documentElement.dataset.palette = palette;
+  </script>
+  <link rel="preload" href="assets/montserrat-latin.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a href="#contenido" class="skip-link">Ir al contenido</a>
+  <header class="site-header" id="inicio">
+    <div class="header-inner container">
+      <a class="wordmark" href="#inicio" aria-label="cafito, inicio">cafito<span>.</span></a>
+      <nav aria-label="Navegación principal">
+        <a href="#catalogo">Menú</a>
+        <a class="social-nav" href="#instagram">Instagram</a>
+        <a href="#pedido" class="bag-link" aria-label="Ver mi pedido">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" aria-hidden="true"><path d="M5 8h14l1.3 13H3.7L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+          <span>Mi pedido</span><span class="bag-count" id="bag-count" aria-hidden="true">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="label">Café take &amp; away</p>
+        <h1 id="hero-title">Tu café,<br><em>to go.</em></h1>
+        <p class="hero-summary">Elegí lo que te tienta, pedilo por WhatsApp y pasá a buscarlo.</p>
+        <a href="#catalogo" class="button button-primary">Ver el menú <span class="arrow arrow-down" aria-hidden="true"></span></a>
+      </div>
+      <div class="hero-art">
+        <img src="assets/hero.webp" width="1536" height="1024" alt="Vaso amarillo de cafito sobre un pedestal rosa, con granos de café" fetchpriority="high" class="hero-image">
+      </div>
+    </section>
+
+    <section class="catalog container" id="catalogo" aria-labelledby="menu-title">
+      <div class="catalog-header">
+        <div>
+          <p class="label">El menú</p>
+          <h2 id="menu-title">¿Qué te <em>tienta?</em></h2>
+          <p class="sample-note" id="sample-note">Menú y precios de muestra</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filtrar menú">
+          <button type="button" aria-pressed="true" data-category="todos">Todo</button>
+          <button type="button" aria-pressed="false" data-category="calientes">Calientes</button>
+          <button type="button" aria-pressed="false" data-category="frios">Fríos</button>
+          <button type="button" aria-pressed="false" data-category="acompanar">Para acompañar</button>
+        </div>
+      </div>
+      <div class="product-grid" id="products"></div>
+      <noscript><p>Activá JavaScript para ver el menú y armar tu pedido.</p></noscript>
+      <p id="menu-status" class="sr-only" role="status"></p>
+    </section>
+
+    <section class="order" id="pedido" aria-labelledby="order-title">
+      <div class="container order-inner">
+        <div class="order-copy">
+          <p class="label">Pedí para retirar</p>
+          <h2 id="order-title">Armá tu <em>cafito.</em></h2>
+          <p>Mandanos tu pedido por WhatsApp. Te confirmamos cuánto tarda y cuándo podés pasar a buscarlo.</p>
+        </div>
+        <form id="order-form" class="receipt" novalidate>
+          <h3>Tu pedido</h3>
+          <p id="empty-order">Sumá algo del menú para empezar.</p>
+          <a id="back-to-menu" href="#catalogo">Volver al menú</a>
+          <ul class="order-items" id="order-items" aria-label="Productos elegidos" hidden></ul>
+          <div class="order-total" id="order-total" hidden><span>Total estimado</span><strong id="total-amount"></strong></div>
+          <fieldset id="payment" aria-describedby="payment-error" hidden>
+            <legend>Forma de pago</legend>
+            <div class="payment-options" id="payment-options"></div>
+            <p class="payment-error" id="payment-error" role="alert" hidden>Elegí una forma de pago para continuar.</p>
+          </fieldset>
+          <button class="button button-primary send-button" id="send-order" type="submit" disabled>Ver mensaje de WhatsApp <span class="arrow arrow-out" aria-hidden="true"></span></button>
+          <p class="order-note" id="order-note">La confirmación y el tiempo de retiro se coordinan por chat.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="social container" id="instagram" aria-labelledby="social-title">
+      <div class="social-header">
+        <div><p class="label">Instagram</p><h2 id="social-title">Entre <em>cafitos.</em></h2></div>
+        <a href="https://www.instagram.com/" id="instagram-profile" class="text-link" target="_blank" rel="noopener noreferrer" hidden>Ver en Instagram <span class="arrow arrow-out" aria-hidden="true"></span></a>
+        <p class="sample-note" id="social-note">Galería de muestra</p>
+      </div>
+      <div class="social-grid" id="social-grid"></div>
+    </section>
+
+    <section class="about" id="nosotros" aria-labelledby="about-title">
+      <div class="container about-inner">
+        <div><p class="label">Sobre cafito</p><h2 id="about-title">Una pausa <em>para llevar.</em></h2></div>
+        <p>Cafito es esa pausa entre una cosa y la otra. Un café a mano para seguir tu día a tu ritmo.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="wordmark" href="#inicio" aria-label="cafito, volver al inicio">cafito<span>.</span></a>
+      <span>Café Take &amp; Away</span>
+      <a href="#inicio" class="text-link">Volver arriba</a>
+    </div>
+  </footer>
+
+  <a class="floating-order button button-primary" href="#pedido" id="floating-order" hidden>
+    <span id="floating-count"></span>
+    <span>Ver mi pedido</span>
+  </a>
+
+  <dialog id="message-dialog" aria-labelledby="message-title">
+    <div class="dialog-head">
+      <h2 id="message-title">Tu mensaje</h2>
+      <form method="dialog"><button type="submit" class="icon-button" aria-label="Cerrar vista previa">×</button></form>
+    </div>
+    <p>Vista previa de WhatsApp. El número de cafito todavía está pendiente.</p>
+    <pre id="message-text" tabindex="0"></pre>
+    <button class="button button-primary" type="button" id="copy-message">Copiar mensaje</button>
+    <p id="copy-status" role="status"></p>
+  </dialog>
+</body>
+</html>
